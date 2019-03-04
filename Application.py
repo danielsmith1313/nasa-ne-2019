@@ -126,6 +126,9 @@ class NodeBasedPathfinding(Frame):
         self.indexNodeX = 0
         self.indexNodeY = 0
         self.convertedNodeArray = []
+        #Holds the file which will be read
+        self.__readFile = open("testData","r")
+
         
         #holds the points as single numbers for display
         self.__nodeX = []
@@ -166,6 +169,11 @@ class NodeBasedPathfinding(Frame):
         self.entryNeighbors = Entry(self)
         self.entryNeighbors.grid(row = 2, column = 2, sticky = NSEW)
         
+        #Reads the selected file from __readFile
+        self.btnReadFromFile = Button(self, text = "Read from file", command = self.readFromFile)
+        self.btnReadFromFile.grid(row = 3, column = 1, sticky = NSEW)
+        
+
         
     #----------
     #Event handlers
@@ -229,20 +237,28 @@ class NodeBasedPathfinding(Frame):
         #Add the point to the array
         self.__nodeX.append(self.convertedNode[0])
         self.__nodeY.append(self.convertedNode[1])
-        
+
+
+    
+    #Takes a file from __readFile and loads it into 
+    def readFromFile(self):
+        for line in self.__readFile:
+            print (line)
+
+
 #------------------
 #Obstacle avoidance class
 #------------------
 
-class BasicObstacleAvoidanceApplication(Frame):
+class ObstacleAvoidanceApplication(Frame):
     
-    
+    #Constructor
     def __init__(self, master):
         
         #Declare constants
         DETECT_RANGE = 2
-        #Import the constructor from the Frame class
-        super(BasicObstacleAvoidanceApplication, self).__init__(master)
+        #Import the constructor from the tkinter frame class
+        super(ObstacleAvoidanceApplication, self).__init__(master)
         
         #Root used to create a after loop
         self.__master = master
@@ -258,6 +274,9 @@ class BasicObstacleAvoidanceApplication(Frame):
         
         #Controls external loops
         self.__cancelID = None
+
+        
+
         
     def createWidgets(self):
         """Initialization function that creates all widgets"""
