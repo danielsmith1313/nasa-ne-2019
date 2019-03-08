@@ -12,11 +12,18 @@ class map():
         """Called once all nodes have been added to"""
         self.__node = tuple(self.__nodeList)
 
+    #Getters
     def getNode(self):
         return self.__node
 
     def getNodeNeighbors(self):
         return self.__nodeNeighbors
+    
+    #Setters
+    def setNodeNeighbors(self,nodeIn):
+        self.__nodeNeighbors = nodeIn
+    def setNode(self, nodeIn):
+        self.__node = nodeIn
 
     def addNode(self, nodeX, nodeY, neighborData):
         """Formats the node map and node neighbor from a x and y initial value and a 2d array of neighbor x and y values

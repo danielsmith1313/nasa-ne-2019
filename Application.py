@@ -23,6 +23,10 @@ from Dijkstra import Dijkstras
 from NodeMapper import map
 #Library that is used to create a scatter plot showing the nodes
 import matplotlib.pyplot as plt
+
+#json, JavaScript Object Notation allows easier reading and writing of files
+import json
+
 #Exception handling
 import logging
 
@@ -126,9 +130,6 @@ class NodeBasedPathfinding(Frame):
         self.indexNodeX = 0
         self.indexNodeY = 0
         self.convertedNodeArray = []
-        #Holds the file which will be read
-        self.__readFile = open("testData","r")
-
         
         #holds the points as single numbers for display
         self.__nodeX = []
@@ -171,8 +172,11 @@ class NodeBasedPathfinding(Frame):
         
         #Reads the selected file from __readFile
         self.btnReadFromFile = Button(self, text = "Read from file", command = self.readFromFile)
-        self.btnReadFromFile.grid(row = 3, column = 1, sticky = NSEW)
+        self.btnReadFromFile.grid(row = 4, column = 0, sticky = NSEW)
         
+        #Writes to selected file
+        self.btnReadFromFile = Button(self, text = "Write to file", command = self.writeToFile)
+        self.btnReadFromFile.grid(row = 1, column = 3, sticky = NSEW)
 
         
     #----------
@@ -180,7 +184,7 @@ class NodeBasedPathfinding(Frame):
     #----------
     def calculatePath(self):
         #Takes all the numbers stored and passes them through Dijkstra's algorithm
-        self.__nMapper.compileMap()
+
         self.__dijkstra = Dijkstras(self.__nMapper.getNode(), self.__nMapper.getNodeNeighbors(), "0,0")
         self.__dijkstra.algorithm()
         print("prev: ", self.__dijkstra.getPrev())
@@ -242,9 +246,31 @@ class NodeBasedPathfinding(Frame):
     
     #Takes a file from __readFile and loads it into 
     def readFromFile(self):
-        for line in self.__readFile:
+        self.__file = open("Node.txt", "r")
+        
+        for line in self.__file:
             print (line)
+            
+        self.__file = open("NodeNeighbor.txt", "r")
+        for line in self.__file:
+            print(line)
 
+    def writeToFile(self):
+        self.__nMapper.compileMap()
+        #Open in overwrite mode
+        self.__file = open("Node.txt", "w+")
+        #Dump the data to the file
+        self.__file.write(json.dumps(self.__nMapper.getNode()))
+        self.__file.close()
+        
+        #Open in append mode
+        self.__file = open("NodeNeighbor.txt", "w")
+        
+        print("nodeNeighbors ", " ".join(self.__nMapper.getNodeNeighbors()))
+        
+        #Dump the data
+        self.__file.write(json.dumps(self.__nMapper.getNodeNeighbors()))
+        self.__file.close()
 
 #------------------
 #Obstacle avoidance class
